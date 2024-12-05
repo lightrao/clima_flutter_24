@@ -1,4 +1,6 @@
+import 'package:clima_flutter_24/env_var.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import '../services/location.dart';
 
@@ -21,13 +23,34 @@ class _LoadingScreenState extends State<LoadingScreen> {
     print(location.longitude);
   }
 
+  void getData() async {
+    var url = Uri.https(
+      'api.openweathermap.org',
+      '/data/2.5/weather',
+      {
+        'lat': '30.489772',
+        'lon': '-99.771335',
+        'appid': API_KEY,
+      },
+    );
+
+    http.Response response = await http.get(url);
+    if (response.statusCode == 200) {
+      print('Loading data...');
+      String data = response.body;
+      print(data);
+    } else {
+      print(response.statusCode);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            getLocation();
+            getData();
           },
           child: Text('Get Location'),
         ),
