@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:clima_flutter_24/env_var.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -36,9 +38,12 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
     http.Response response = await http.get(url);
     if (response.statusCode == 200) {
-      print('Loading data...');
       String data = response.body;
-      print(data);
+      var decodedData = jsonDecode(data);
+
+      var temperature = decodedData['main']['temp'];
+      var condition = decodedData['weather'][0]['id'];
+      var cityName = decodedData['name'];
     } else {
       print(response.statusCode);
     }
